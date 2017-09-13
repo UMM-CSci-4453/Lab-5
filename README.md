@@ -293,10 +293,10 @@ Duke University has a good [reference](http://www-dev2.cs.duke.edu/csl/docs/mysq
 
 * Copy your `prices` database to one called `TR_prices`.  
 * Ensure that `TR_prices` has a `notes` field.
+* CREATE two archive tables with the same structure as `TR_prices`:  `TR_archiveA` and `TR_archiveB`
 * Create a trigger that occurs when attempting to delete a row from TR_prices.
-  * If the row to be deleted has your name in the notes field, cancel the deletion,
-  * Otherwise, delete the TR_prices row and add 10 dollars to the price in the prices table that matches the row being deleted.
-
+  * If the row to be deleted has your name in the notes field make a copy of the record in `TR_archiveA`,
+  * Otherwise make a copy of the record in `TR_archiveB`
 
 ## Correlated Subqueries
 
@@ -500,7 +500,7 @@ LOAD XML LOCAL INFILE 'cd_catalog.xml' INTO TABLE cds ROWS IDENTIFIED BY '<CD>';
 
 So... now you can output a query as XML (notice that this tends to use ATTRIBUTES instead of ELEMENTS), and you can import data from XML (as long as the DEPTH of the tree isn't too deep)
 
-## torage Engines
+## Storage Engines
 
 Hidden behind the scenes of a table is the Storage Engine used to control the nuts-and-bolts of how the table is managed.  Different engines have different capabilities and may be more (or less) efficient at certain operations.  
 
