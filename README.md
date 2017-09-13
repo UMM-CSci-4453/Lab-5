@@ -439,7 +439,7 @@ Now that you have a few examples under your belt here's a very good overview of 
 Each group should do the examples in the tutorial below in a database of one of their members (be sure to indicate which in the Wiki group page for this lab).  BUT... change the names of the tables to start with `DC_` (for example, `items` would become `DC_items`)  This will ensure A) I can find the tables easily, and B) we won't run into name conflicts with our own work. 
  
 * [MariaDB Introduction to Dyanamic Columns (part 1)](https://mariadb.com/blog/dynamic-columns-tutorial-part-1-introduction)
-* [Part II of the Introdction](https://mariadb.com/blog/dynamic-columns-tutorial-part-2-searching-and-updating)
+* [Part II of the Introduction](https://mariadb.com/blog/dynamic-columns-tutorial-part-2-searching-and-updating)
 * [More details](https://mariadb.com/kb/en/mariadb/dynamic-columns/)  Pay particular attention to the `COLUMN_JSON` keyword.
 
 ## Introduction to XML
