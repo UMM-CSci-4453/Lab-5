@@ -365,7 +365,7 @@ Both XML and JSON can address these issues.
 
 ### Intro to JSON
 
-The trick behind JSON, is to turn the object into a string that is syntactically correct JavasSript.  Since  JavaScript is an evaluated language, the string can be transferred and then evaluated upon receipt.  Here's an example compliments of Wikipedia:
+The trick behind JSON, is to turn the object into a string that is syntactically correct JavasSript.  Since JavaScript is an evaluated language, the string can be transferred and then evaluated upon receipt.  Here's an example compliments of Wikipedia:
 
 ```
 {    "firstName": "John",
