@@ -300,7 +300,7 @@ Duke University has a good [reference](http://www-dev2.cs.duke.edu/csl/docs/mysq
 
 ## Correlated Subqueries
 
-Recall that A **correlated subquery** is a subquery that uses values from the outer query. The subquery is evaluated once for each row processed by the outer query. (heavily edit Wikipedia quote).  The Wikipedia entry I had you read last lab has a couple of great examples, so do the following:
+Recall that A **correlated subquery** is a subquery that uses values from the outer query. The subquery is evaluated once for each row processed by the outer query. (heavily edit Wikipedia quote).  The [Wikipedia entry](https://en.wikipedia.org/wiki/Correlated_subquery) that I had you read last lab has a couple of great examples, so do the following:
 
 **Correlated Subquery Exercise**
 Each group (remember to tell me *whose* database has the group's works in canvas), should do the following:
