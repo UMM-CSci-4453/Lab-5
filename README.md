@@ -215,6 +215,7 @@ SELECT @a;
 ```
 
 Now do this:
+
 ```{sql}
 SELECT *,(@a:=@a+1) AS counter FROM inventory;
 ```
@@ -224,7 +225,7 @@ What's with all the `NULLS`? Fix it by assigning a value to `@a` BEFORE the quer
 <I'll wait>
 ```
 
-Now modify the query above so that `@a` is replaced with `@a+1` if `@a<10`, but is set to 1 otherwise. Run your query 3 or 4 times.
+Now modify the query above so that `@a` is replaced with `@a+1` if `@a<10`, but is set to 1 otherwise. ([The `if` _function_](https://mariadb.com/kb/en/library/if-function/) might be useful.) Run your query 3 or 4 times.
 
 ```
 <Waiting again>
