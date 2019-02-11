@@ -270,7 +270,7 @@ You remove a stored procedure using `DROP PROCEDURE` (or `DROP PROCEDURE IF EXIS
 
 Now read the topics in the link below. Skip over the one on binary logging and the one on `SHOW PROCEDURE CODE`(because I have not enabled debugging). As you read, bear in mind that the ability to call `CREATE PROCEDURE` requires the `CREATE ROUTINE` privilege (I find this naming convention disturbing... why not call the privilege the `CREATE PROCEDURE` privilege?). Also notice that we can define parameters for a procedure just as we did for functions… but we ALSO have the ability to CHANGE the contents of a parameter (read the examples carefully in the create-procedure topic). Also pay attention to the `INTO` clause (which is part of `SELECT`), which allows you to assign the output of a single value query into a variable:
 
-<https://mariadb.com/kb/en/stored-procedures/>
+<https://mariadb.com/kb/en/library/stored-procedures/>
 
 Also note that it is possible to have the stored-procedure run as the DEFINER rather than the INVOKER (which is occasionally useful, and occasionally a security nightmare). 
 
