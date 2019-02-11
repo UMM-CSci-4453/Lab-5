@@ -277,11 +277,11 @@ SELECT @mymin, @mymax, @myavg;
 
 ## Constraints
 
-Constaints are a way to tell the database that certain operations should be forbidden.  Read the link that follows, but skim over anything that doesn't make sense, and read everything with a grain of salt--it doesn't quite work the same for MariaDB. 
-
-Do the examples shown. This will require you to create and drop a few tables of your own devising to fit the examples--you don't need to keep them after this lab, however be aware that the author occasionally messes up the syntax and you will have to be clever enough to fix it yourself, and that, I'll reiterate, not everything acts the same in MariaDB as in the SQL99 standard--so pay attention: 
-
-https://mariadb.com/kb/en/20-sql-constraints-and-assertions-constraint/
+> There used to be a section here on constraints, which are a way
+> of telling the database that certain operations should be
+> forbidden. How mariaDB handles constraints changed a _lot_ in
+> version 10.2, and we're currently using 10.0, making most of
+> this obsolete. We'll just skip constraints for now.
 
 ## Triggers
 
