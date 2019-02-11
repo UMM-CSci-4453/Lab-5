@@ -22,23 +22,40 @@ This lab will introduce some more advanced features of SQL and then proceed to i
 
 
 ## Views
+
 A view is a virtual table. Instead of creating an actual table, you specify a query that is run "behind-the-scenes".
-Consider this query on randA, and randB (don't run it... if you do then you will likely want to open another mysql session and kill it):
+Consider this query on our `randA` and `randB` from the previous lab (don't run it... if you do then you will likely want to open another mysql session and kill it):
 
 ```{sql}
-SELECT randA.A AS link, randA.B AS first_B,randB.B AS second_B FROM randA, randB WHERE randA.A=randB.A ORDER BY randA.A 
+SELECT randA.A AS link, 
+       randA.B AS first_B,
+       randB.B AS second_B 
+FROM randA, randB 
+WHERE randA.A=randB.A 
+ORDER BY randA.A 
 ```
 
 Let's get a sense for what the data should look like:
 
 ```{sql}
-SELECT randA.A AS link, randA.B AS first_B,randB.B AS second_B FROM randA, randB WHERE randA.A=randB.A ORDER BY randA.A LIMIT 10;
+SELECT randA.A AS link, 
+       randA.B AS first_B,
+       randB.B AS second_B 
+FROM randA, randB 
+WHERE randA.A=randB.A 
+ORDER BY randA.A LIMIT 10;
 ```
 
 We can take this query and create a REAL table like this:
 
 ```{sql}
-CREATE TABLE joined SELECT randA.A AS link, randA.B AS first_B,randB.B AS second_B FROM randA, randB WHERE randA.A=randB.A ORDER BY randA.A;
+CREATE TABLE joined 
+SELECT randA.A AS link, 
+       randA.B AS first_B, 
+       randB.B AS second_B 
+FROM randA, randB 
+WHERE randA.A=randB.A 
+ORDER BY randA.A;
 ```
 
 You can override the columns names if you like... see about 2/3rds of the way down here for details: 
@@ -54,9 +71,23 @@ DROP TABLE joined;
 Now let's create the view:
 
 ```{sql}
-CREATE VIEW joined AS SELECT randA.A AS link, randA.B AS first_B,randB.B AS second_B FROM randA, randB WHERE randA.A=randB.A ORDER BY randA.A;
+CREATE VIEW joined AS 
+SELECT randA.A AS link, 
+       randA.B AS first_B,
+       randB.B AS second_B 
+FROM randA, randB 
+WHERE randA.A=randB.A 
+ORDER BY randA.A;
 ```
-You can use views to hide complex SQL. For example, consider your inventory and prices tables. Suppose you needed to create a report and want your output to look like this:
+
+Now you can treat joined pretty much like any table, but it's not
+actually a table, it's a virtual table that provides a _view_ onto 
+this organization of the data in tables `randA` and `randB`.
+
+:warning: A word of caution: You CAN (under the right conditions) update a view--but it actually updates the corresponding, underlying tables--at least as long as mariaDB can figure out how to that correctly. (And yes--this includes deletes). This is an area about which I am far from an expert... if you want to experiment with it and show me how it works that would be cool.
+
+The nice thing about views is that you can use them to hid (or
+abstract out) complex SQL. For example, consider your inventory and prices tables. Suppose you needed to create a report and want your output to look like this:
 
 ```
 <10 characters worth of item--padded if necessary by *'s>[<amount>](<price>)
@@ -71,7 +102,7 @@ pumpkin***[14]($10.13)
 Okay... make that happen. You'll probably have to review the mariaDB string functions. I found it to be a bit of a pain in the butt, but still doable. But now convert your query into a view called `ticketItem` and call the calculated column output by the same name:
 
 ```
-<your work here>
+<I'll wait for you to figure that out>
 ```
 
 Now you should be able to do this: 
@@ -80,8 +111,6 @@ SELECT * FROM ticketItem;
 ```
 
 You might also find it useful to create views that apply some sort of filter to your raw data. 
-
-A word of caution: You CAN (under the right conditions) update a view--but it actually updates the corresponding, underlying tables--at least as long as mariaDB can figure out how to that correctly. (And yes--this includes deletes). This is an area about which I am far from an expert... if you want to experiment with it and show me how it works that would be cool.
 
 ## Stored functions
 
@@ -186,6 +215,7 @@ SELECT @a;
 ```
 
 Now do this:
+
 ```{sql}
 SELECT *,(@a:=@a+1) AS counter FROM inventory;
 ```
@@ -195,7 +225,7 @@ What's with all the `NULLS`? Fix it by assigning a value to `@a` BEFORE the quer
 <I'll wait>
 ```
 
-Now modify the query above so that `@a` is replaced with `@a+1` if `@a<10`, but is set to 1 otherwise. Run your query 3 or 4 times.
+Now modify the query above so that `@a` is replaced with `@a+1` if `@a<10`, but is set to 1 otherwise. ([The `if` _function_](https://mariadb.com/kb/en/library/if-function/) might be useful.) Run your query 3 or 4 times.
 
 ```
 <Waiting again>
@@ -240,7 +270,7 @@ You remove a stored procedure using `DROP PROCEDURE` (or `DROP PROCEDURE IF EXIS
 
 Now read the topics in the link below. Skip over the one on binary logging and the one on `SHOW PROCEDURE CODE`(because I have not enabled debugging). As you read, bear in mind that the ability to call `CREATE PROCEDURE` requires the `CREATE ROUTINE` privilege (I find this naming convention disturbing... why not call the privilege the `CREATE PROCEDURE` privilege?). Also notice that we can define parameters for a procedure just as we did for functions… but we ALSO have the ability to CHANGE the contents of a parameter (read the examples carefully in the create-procedure topic). Also pay attention to the `INTO` clause (which is part of `SELECT`), which allows you to assign the output of a single value query into a variable:
 
-<https://mariadb.com/kb/en/stored-procedures/>
+<https://mariadb.com/kb/en/library/stored-procedures/>
 
 Also note that it is possible to have the stored-procedure run as the DEFINER rather than the INVOKER (which is occasionally useful, and occasionally a security nightmare). 
 
@@ -277,11 +307,11 @@ SELECT @mymin, @mymax, @myavg;
 
 ## Constraints
 
-Constaints are a way to tell the database that certain operations should be forbidden.  Read the link that follows, but skim over anything that doesn't make sense, and read everything with a grain of salt--it doesn't quite work the same for MariaDB. 
-
-Do the examples shown. This will require you to create and drop a few tables of your own devising to fit the examples--you don't need to keep them after this lab, however be aware that the author occasionally messes up the syntax and you will have to be clever enough to fix it yourself, and that, I'll reiterate, not everything acts the same in MariaDB as in the SQL99 standard--so pay attention: 
-
-https://mariadb.com/kb/en/20-sql-constraints-and-assertions-constraint/
+> There used to be a section here on constraints, which are a way
+> of telling the database that certain operations should be
+> forbidden. How mariaDB handles constraints changed a _lot_ in
+> version 10.2, and we're currently using 10.0, making most of
+> this obsolete. We'll just skip constraints for now.
 
 ## Triggers
 
