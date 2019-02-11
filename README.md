@@ -22,23 +22,40 @@ This lab will introduce some more advanced features of SQL and then proceed to i
 
 
 ## Views
+
 A view is a virtual table. Instead of creating an actual table, you specify a query that is run "behind-the-scenes".
-Consider this query on randA, and randB (don't run it... if you do then you will likely want to open another mysql session and kill it):
+Consider this query on our `randA` and `randB` from the previous lab (don't run it... if you do then you will likely want to open another mysql session and kill it):
 
 ```{sql}
-SELECT randA.A AS link, randA.B AS first_B,randB.B AS second_B FROM randA, randB WHERE randA.A=randB.A ORDER BY randA.A 
+SELECT randA.A AS link, 
+       randA.B AS first_B,
+       randB.B AS second_B 
+FROM randA, randB 
+WHERE randA.A=randB.A 
+ORDER BY randA.A 
 ```
 
 Let's get a sense for what the data should look like:
 
 ```{sql}
-SELECT randA.A AS link, randA.B AS first_B,randB.B AS second_B FROM randA, randB WHERE randA.A=randB.A ORDER BY randA.A LIMIT 10;
+SELECT randA.A AS link, 
+       randA.B AS first_B,
+       randB.B AS second_B 
+FROM randA, randB 
+WHERE randA.A=randB.A 
+ORDER BY randA.A LIMIT 10;
 ```
 
 We can take this query and create a REAL table like this:
 
 ```{sql}
-CREATE TABLE joined SELECT randA.A AS link, randA.B AS first_B,randB.B AS second_B FROM randA, randB WHERE randA.A=randB.A ORDER BY randA.A;
+CREATE TABLE joined 
+SELECT randA.A AS link, 
+       randA.B AS first_B, 
+       randB.B AS second_B 
+FROM randA, randB 
+WHERE randA.A=randB.A 
+ORDER BY randA.A;
 ```
 
 You can override the columns names if you like... see about 2/3rds of the way down here for details: 
@@ -54,9 +71,23 @@ DROP TABLE joined;
 Now let's create the view:
 
 ```{sql}
-CREATE VIEW joined AS SELECT randA.A AS link, randA.B AS first_B,randB.B AS second_B FROM randA, randB WHERE randA.A=randB.A ORDER BY randA.A;
+CREATE VIEW joined AS 
+SELECT randA.A AS link, 
+       randA.B AS first_B,
+       randB.B AS second_B 
+FROM randA, randB 
+WHERE randA.A=randB.A 
+ORDER BY randA.A;
 ```
-You can use views to hide complex SQL. For example, consider your inventory and prices tables. Suppose you needed to create a report and want your output to look like this:
+
+Now you can treat joined pretty much like any table, but it's not
+actually a table, it's a virtual table that provides a _view_ onto 
+this organization of the data in tables `randA` and `randB`.
+
+:warning: A word of caution: You CAN (under the right conditions) update a view--but it actually updates the corresponding, underlying tables--at least as long as mariaDB can figure out how to that correctly. (And yes--this includes deletes). This is an area about which I am far from an expert... if you want to experiment with it and show me how it works that would be cool.
+
+The nice thing about views is that you can use them to hid (or
+abstract out) complex SQL. For example, consider your inventory and prices tables. Suppose you needed to create a report and want your output to look like this:
 
 ```
 <10 characters worth of item--padded if necessary by *'s>[<amount>](<price>)
@@ -71,7 +102,7 @@ pumpkin***[14]($10.13)
 Okay... make that happen. You'll probably have to review the mariaDB string functions. I found it to be a bit of a pain in the butt, but still doable. But now convert your query into a view called `ticketItem` and call the calculated column output by the same name:
 
 ```
-<your work here>
+<I'll wait for you to figure that out>
 ```
 
 Now you should be able to do this: 
@@ -80,8 +111,6 @@ SELECT * FROM ticketItem;
 ```
 
 You might also find it useful to create views that apply some sort of filter to your raw data. 
-
-A word of caution: You CAN (under the right conditions) update a view--but it actually updates the corresponding, underlying tables--at least as long as mariaDB can figure out how to that correctly. (And yes--this includes deletes). This is an area about which I am far from an expert... if you want to experiment with it and show me how it works that would be cool.
 
 ## Stored functions
 
