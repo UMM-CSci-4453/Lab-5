@@ -317,7 +317,7 @@ SELECT @mymin, @mymax, @myavg;
 
 Triggers allow an action in a database (such as a `DELETE` action) to cause another action to occur as well (such as an `INSERT` action).
 
-Duke University has a good [reference](http://www-dev2.cs.duke.edu/csl/docs/mysql-refman/triggers.html) to the syntax, and [MariaDB's documentation](https://mariadb.com/kb/en/trigger-examples/) has some good examples too.
+Duke University has a good [reference](http://www-dev2.cs.duke.edu/csl/docs/mysql-refman/triggers.html) to the syntax, and [MariaDB's documentation](https://mariadb.com/kb/en/library/trigger-overview/#creating-a-trigger) has some good examples too.
 
 **Trigger Exercise**
 
