@@ -26,7 +26,7 @@ This lab will introduce some more advanced features of SQL and then proceed to i
 A view is a virtual table. Instead of creating an actual table, you specify a query that is run "behind-the-scenes".
 Consider this query on our `randA` and `randB` from the previous lab (don't run it... if you do then you will likely want to open another mysql session and kill it):
 
-```{sql}
+```sql
 SELECT randA.A AS link, 
        randA.B AS first_B,
        randB.B AS second_B 
@@ -37,7 +37,7 @@ ORDER BY randA.A
 
 Let's get a sense for what the data should look like:
 
-```{sql}
+```sql
 SELECT randA.A AS link, 
        randA.B AS first_B,
        randB.B AS second_B 
@@ -48,7 +48,7 @@ ORDER BY randA.A LIMIT 10;
 
 We can take this query and create a REAL table like this:
 
-```{sql}
+```sql
 CREATE TABLE joined 
 SELECT randA.A AS link, 
        randA.B AS first_B, 
@@ -64,13 +64,13 @@ You can override the columns names if you like... see about 2/3rds of the way do
 
 But instead of doing something that permanent, we are going to create a view instead. So drop that table first:
 
-```{sql}
+```sql
 DROP TABLE joined;
 ```
 
 Now let's create the view:
 
-```{sql}
+```sql
 CREATE VIEW joined AS 
 SELECT randA.A AS link, 
        randA.B AS first_B,
@@ -106,7 +106,7 @@ Okay... make that happen. You'll probably have to review the mariaDB string func
 ```
 
 Now you should be able to do this: 
-```
+```sql
 SELECT * FROM ticketItem;
 ```
 
@@ -121,7 +121,7 @@ We create a function using `CREATE FUNCTION` and delete it using `DROP FUNCTION`
 
 Let's start with a basic outline:
 
-```
+```sql
 CREATE FUNCTION ticketize RETURNS TEXT DETERMINISTIC
 BEGIN
 ….
@@ -149,7 +149,7 @@ And when you return the value you have to return a **variable** of the proper ty
 
 You might think that this would work:
 
-```
+```sql
 CREATE FUNCTION FortyTwo() RETURNS TINYINT DETERMINISTIC
 BEGIN
     DECLARE x TINYINT;
@@ -160,7 +160,7 @@ END
 
 Except that the ; is interpreted by the mariaDB client incorrectly. :bangbang: You need to change the command delimiter first:
 
-```
+```sql
 DELIMITER //
 CREATE FUNCTION FortyTwo() RETURNS TINYINT DETERMINISTIC
 BEGIN
@@ -198,25 +198,25 @@ Now read [the MariaDB page on user defined variables](https://mariadb.com/kb/en/
 
 Give this a try:
 
-```{sql}
+```sql
 SET @a=0;
 ```
 
 And then this:
 
-```{sql}
+```sql
 SELECT @a;
 ```
 
 now leave MariaDB, come back in, and do it again
 
-```{sql}
+```sql
 SELECT @a;
 ```
 
 Now do this:
 
-```{sql}
+```sql
 SELECT *,(@a:=@a+1) AS counter FROM inventory;
 ```
 What's with all the `NULLS`? Fix it by assigning a value to `@a` BEFORE the query.
@@ -250,7 +250,7 @@ This is, so to speak, the scripting language, of mariaDB... of course the techno
 
 One stores a procedure using `CREATE PROCEDURE` (begin mindful of the delimiter issue):
 
-```{sql}
+```sql
 DELIMITER //
 CREATE PROCEDURE averageprice()
 BEGIN
@@ -262,7 +262,7 @@ DELIMITER ;
 
 Okay, now you call the stored procedure by name:
 
-```{sql}
+```sql
 CALL averageprice();
 ```
 
@@ -278,7 +278,7 @@ Procedures are, by default, associated with the current database.
 
 Let's do one that returns the min, max and average values from a table and stores them in the variables of our choosing (NOTE: I used `DECIMAL(5,2)` for my prices):
 
-```{sql}
+```sql
 DELIMITER //
 CREATE PROCEDURE summary( 
    OUT pmin DECIMAL(5,2), 
@@ -295,13 +295,13 @@ DELIMITER ;
 
 Now call it:
 
-```{sql}
+```sql
 CALL summary(@mymin, @mymax, @myavg);
 ```
 
 And then check that it worked:
 
-```{sql}
+```sql
 SELECT @mymin, @mymax, @myavg;
 ```
 
@@ -357,23 +357,23 @@ Once you have the entries in your tables perform the examples in the Wikipedia p
 There is more than one way to communicate commands or receive results from a database server.  You have entered commands by hand using a text-based client.  You can also use the SOURCE command
 
 From the shell (in the same directory from which you will launch the mariadb host), create the file "test.sql".  The contents should be:
-```{sql}
+```sql
 SELECT * FROM <dbf>.inventory;
 ```
 
 Now start mariadb and execute this command:
-```
+```sql
 SOURCE test.sql; 
 ```
 
 You can also do the same thing (from the shell) via:
-```
+```sh
 mysql -u[your name] -p --host=ids --port=[your port] [your database] < test.sql 
 ```
 NOTE:  I usually use angle brackets to denote things that you will replace... but in the example above I needed to use the `<` symbol as a pipe character, so I used `[]` instead of `<>`.
 
 You can also do something like this:
-```
+```sh
 mysql -u[your name] -p --host=ids --port=[your port] [your database] -e "SELECT * FROM [dbf].inventory"
 ```
 
@@ -397,7 +397,7 @@ Both XML and JSON can address these issues.
 
 The trick behind JSON, is to turn the object into a string that is syntactically correct JavasSript.  Since JavaScript is an evaluated language, the string can be transferred and then evaluated upon receipt.  Here's an example compliments of Wikipedia:
 
-```
+```json
 {    "firstName": "John",
      "lastName": "Smith",
      "age": 25,
@@ -434,26 +434,26 @@ As expected, you can access individual entries (capitalization matters) using do
 * `example["firstName"]`
  
 The dot notation is often easier to read, but lacks the flexibility of the bracket notation; In particular, the bracket notation allows the use of variables:
-```
+```js
 property="lastName"
 example[property]
 ```
 
 If the return value isn't atomic you'll get back something that can be clicked or otherwise manipulated to open an object or array browers:
-```
+```js
 example.phoneNumbers[0] example.phoneNumbers["0"]
 ```
 
 An array (in Javascript) is really just a special type of object.  It has some extra methods, but under the hood it is just a collection of attribute:value pairs (just like all the other objects):
 
-```
+```js
 example.phoneNumber[0]
 example.phoneNumbers["0"]
 ```
 
 But the dot notation does not allow attributes (or properties as they tend to be called in Javascript) to start with a number.  so
 
-```
+```js
 example.phoneNumber.0
 ```
 
@@ -485,12 +485,12 @@ Continue until you reach the section on using CSS to make the XML visible as a m
 I truncated the tree before reaching the actual data... but I think it's enough to give you a sense of how the structure works.  Think about how you would express this information in an SQL database in 3rd normal form.  (Don't actually make these tables... just think about it).
 
 We can actually turn any of our queries into XML.  Try this:
-```
+```sh
 mysql --xml -u <your name> -p --host=ids -e 'show databases'
 ```
 
 And then this:
-```
+```sh
 mysql --xml -u <your name> -p --host=ids -e 'select * from <your dbf>.inventory' 
 ```
 
@@ -502,7 +502,7 @@ Here is documentation on the command that pulls information in from XML back to 
 
 Let's scrape the cd information our online source.  Do this from the shell: 
 
-```
+```sh
 wget http://www.w3schools.com/xml/cd_catalog.xml 
 ```
 
@@ -522,7 +522,7 @@ They should all be text.   See if you can use the `-e` parameter and do it from 
 
 This will pull the contents of the webpage to the directory that you are in.  Log in as usual, and check that the `cd_catalog.xml` file has been created.  Let's convert the data in the XML file into records in the table:
 
-```{sql}
+```sql
 LOAD XML LOCAL INFILE 'cd_catalog.xml' INTO TABLE cds ROWS IDENTIFIED BY '<CD>';
 ```
 
@@ -538,7 +538,7 @@ The [MariaDB dcoumentation on storage engines](https://mariadb.com/kb/en/mariadb
 
 The command `SHOW ENGINES`.  Will reveal what engines are currently available (more may be loaded or unloaded) and which engine is the default.  The particular engine that is used by default in my server is InnoDB which (as you can see) supports transactions.  The `CREATE TABLE` command supports a `STORAGE ENGINE` clause which allows you to determine which storage engine that the table uses (we will play around with this a bit using the CSV  option).  To determine the storage engine you may use this command:
 
-```
+```sql
 SHOW TABLE STATUS WHERE Name='<table name>';
 ```
 
